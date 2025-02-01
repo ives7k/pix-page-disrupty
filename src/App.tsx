@@ -160,6 +160,9 @@ import React, { useEffect, useState } from 'react';
       return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-lg max-w-md w-full p-6 space-y-6">
+            <div className="flex justify-center">
+              <img src="https://cdn.worldvectorlogo.com/logos/shopee-logo.svg" alt="Shopee Logo" className="h-12 mb-4" />
+            </div>
             <div className="text-center space-y-2">
               <h1 className="text-2xl font-bold text-gray-900">Finalize o Pagamento!</h1>
             </div>
