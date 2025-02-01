@@ -161,8 +161,7 @@ import React, { useEffect, useState } from 'react';
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-lg max-w-md w-full p-6 space-y-6">
             <div className="text-center space-y-2">
-              <h1 className="text-2xl font-bold text-gray-900">Aguardando Pagamento!</h1>
-              <p className="text-gray-600 text-lg">Finalize o pagamento</p>
+              <h1 className="text-2xl font-bold text-gray-900">Finalize o Pagamento!</h1>
             </div>
 
             {timerStarted && (
