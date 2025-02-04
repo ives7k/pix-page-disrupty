@@ -9,7 +9,8 @@ function TwentiethPage({ }: TwentiethPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const [pixCode, setPixCode] = useState<string | null>(null); // Ensure pixCode is defined at the top level
+  const [pixCode, setPixCode] = useState<string | null>(null); // pixCode MUST be defined at the top level
+  const [copySuccess, setCopySuccess] = useState(false);
   const pixDataRef = useRef<any | null>(null);
   const apiCalledRef = useRef(false);
   const [timeLeft, setTimeLeft] = useState(900);
@@ -35,7 +36,8 @@ function TwentiethPage({ }: TwentiethPageProps) {
     if (pixCode) {
       navigator.clipboard.writeText(pixCode)
         .then(() => {
-          alert('Código PIX copiado para a área de transferência!');
+          setCopySuccess(true);
+          setTimeout(() => setCopySuccess(false), 2000);
         })
         .catch(err => {
           console.error('Failed to copy: ', err);
@@ -156,9 +158,9 @@ function TwentiethPage({ }: TwentiethPageProps) {
                   <div className="pix-code-container mb-4 cursor-pointer" onClick={handleCopyPix}>
                     <p>{pixCode}</p>
                   </div>
-                  <button onClick={handleCopyPix} className="bg-[#ff4d2d] text-white py-3 px-6 rounded-lg font-bold hover:bg-[#ff6b4f] w-full mb-4 flex justify-center items-center">
+                  <button onClick={handleCopyPix} className={`bg-[#ff4d2d] text-white py-3 px-6 rounded-lg font-bold hover:bg-[#ff6b4f] w-full mb-4 flex justify-center items-center ${copySuccess ? 'bg-green-500' : ''}`}>
                     <Copy className="mr-2 h-5 w-5" />
-                    Copiar código PIX
+                    {copySuccess ? 'Copiado!' : 'Copiar código PIX'}
                   </button>
                   <p className="flex items-center mb-4 text-[#ff4d2d]">
                     <Loader2 className="animate-spin mr-2 h-5 w-5 text-[#ff4d2d]" />
