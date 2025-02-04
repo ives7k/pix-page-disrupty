@@ -1,0 +1,43 @@
+.address-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #6c63ff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+}
+
+.state-select {
+    width: 100px; /* Reduced width for the state select */
+}
+
+.contact-form {
+  margin-top: 20px;
+}
+
+.contact-form .form-group {
+  margin-bottom: 10px;
+}

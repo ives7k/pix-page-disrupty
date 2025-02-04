@@ -1,0 +1,89 @@
+.cartao-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilo do cartão */
+.cartao {
+    width: var(--cartao-width, 350px);
+    height: var(--cartao-height, 200px);
+    border-radius: 15px;
+    background: var(--cartao-bg, #ee4d2d);
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+.imagem-chip {
+    width: 35px;
+    position: absolute;
+    top: 40%;
+    left: 15px;
+    transform: translateY(-50%);
+}
+.imagem-lateral {
+    width: 30px;
+    position: absolute;
+    top: 40%;
+    left: 60px;
+    transform: translateY(-50%);
+}
+.top-left-text {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 100px;
+}
+.top-right-img {
+    width: 50px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+    .card-details {
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        bottom: 20px;
+        width: 90%;
+        left: 5%;
+    }
+    .titular {
+        text-align: left;
+    }
+    .valido {
+        text-align: right;
+    }
+    .titular p, .valido p {
+        margin: 0;
+        font-size: 10px; /* Tamanho da fonte para o texto */
+    }
+    .texto {
+        font-size: 14px; /* Tamanho da fonte do texto "Titular do Cartão" */
+        text-transform: uppercase;
+        color: #ffffff;
+    }
+    .color-options {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    .color-options button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: border 0.3s ease;
+    }
+    .color-options button:hover {
+        border-color: #6c63ff;
+    }
+    .color-options .selected {
+        border-color: #6c63ff;
+    }
