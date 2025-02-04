@@ -9,7 +9,7 @@ function TwentiethPage({ }: TwentiethPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const [pixCode, setPixCode] = useState<string | null>(null); // pixCode is now correctly declared
+  const [pixCode, setPixCode] = useState<string | null>(null); // Ensure pixCode is defined at the top level
   const pixDataRef = useRef<any | null>(null);
   const apiCalledRef = useRef(false);
   const [timeLeft, setTimeLeft] = useState(900);
@@ -31,7 +31,7 @@ function TwentiethPage({ }: TwentiethPageProps) {
     return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 });
   };
 
-  const handleCopyPix = () => { // handleCopyPix now has access to pixCode
+  const handleCopyPix = () => {
     if (pixCode) {
       navigator.clipboard.writeText(pixCode)
         .then(() => {
@@ -135,35 +135,39 @@ function TwentiethPage({ }: TwentiethPageProps) {
       <div className="page-content flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
           <h2 className="text-2xl font-bold mb-4">Finalize o Pagamento!</h2>
-          <div className="flex flex-col items-center w-full max-w-md mx-auto mb-4">
-            <p className="text-[#ff4d2d] font-bold text-lg mb-2 flex items-center">
-              <Clock className="h-6 w-6 mr-2" />
-              {formatTime(timeLeft)} para pagar
-            </p>
-            <div className="w-full h-2 bg-gray-200 rounded-lg">
-              <div className="bg-[#ff4d2d] h-full rounded-lg" style={{ width: `${progress}%` }}></div>
+          {pixCode && (
+            <div className="flex flex-col items-center w-full max-w-md mx-auto mb-4">
+              <p className="text-[#ff4d2d] font-bold text-lg mb-2 flex items-center">
+                <Clock className="h-6 w-6 mr-2" />
+                {formatTime(timeLeft)} para pagar
+              </p>
+              <div className="w-full h-2 bg-gray-200 rounded-lg">
+                <div className="bg-[#ff4d2d] h-full rounded-lg" style={{ width: `${progress}%` }}></div>
+              </div>
             </div>
-          </div>
+          )}
           <div className="bg-gray-100 p-4 mb-4 w-full max-w-md mx-auto rounded-lg">
             <div className="flex flex-col items-center">
               {qrCodeUrl && (
                 <img src={qrCodeUrl} alt="PIX QR Code" className="mb-2 mx-auto" />
               )}
-              <div className="pix-code-container mb-4">
-                {pixCode && (
-                  <p>{pixCode}</p>
-                )}
-                {!pixCode && !error && <p className="text-center">Gerando PIX...</p>}
-                {error && <p className="text-center text-red-500 text-xl font-bold">Error: {error}</p>}
-              </div>
-              <button onClick={handleCopyPix} className="bg-[#ff4d2d] text-white py-3 px-6 rounded-lg font-bold hover:bg-[#ff6b4f] w-full mb-4 flex justify-center items-center">
-                <Copy className="mr-2 h-5 w-5" />
-                Copiar código PIX
-              </button>
-              <p className="flex items-center mb-4 text-[#ff4d2d]">
-                <Loader2 className="animate-spin mr-2 h-5 w-5 text-[#ff4d2d]" />
-                Aguardando Pagamento
-              </p>
+              {pixCode && (
+                <>
+                  <div className="pix-code-container mb-4 cursor-pointer" onClick={handleCopyPix}>
+                    <p>{pixCode}</p>
+                  </div>
+                  <button onClick={handleCopyPix} className="bg-[#ff4d2d] text-white py-3 px-6 rounded-lg font-bold hover:bg-[#ff6b4f] w-full mb-4 flex justify-center items-center">
+                    <Copy className="mr-2 h-5 w-5" />
+                    Copiar código PIX
+                  </button>
+                  <p className="flex items-center mb-4 text-[#ff4d2d]">
+                    <Loader2 className="animate-spin mr-2 h-5 w-5 text-[#ff4d2d]" />
+                    Aguardando Pagamento
+                  </p>
+                </>
+              )}
+              {!pixCode && !error && <p className="text-center">Gerando PIX...</p>}
+              {error && <p className="text-center text-red-500 text-xl font-bold">Error: {error}</p>}
               <div className="flex justify-between w-full max-w-xs mb-4">
                 <p className="text-right text-xl font-bold">Valor:</p>
                 <p className="text-xl font-bold text-green-500">{parsedShippingMethod?.price || 'Valor não disponível'}</p>
