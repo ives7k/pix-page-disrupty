@@ -3,11 +3,9 @@ import Layout from './components/Layout';
 import './TwentiethPage.css';
 import { Loader2, ShieldCheck, Copy, Check, Clock } from 'lucide-react';
 
-interface TwentiethPageProps {
-  onNext: () => void;
-}
+interface TwentySecondPageProps {}
 
-function TwentiethPage({ onNext }: TwentiethPageProps) {
+function TwentySecondPage({ }: TwentySecondPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
@@ -18,8 +16,6 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
   const [progress, setProgress] = useState(0);
   const [timerStarted, setTimerStarted] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const shippingMethod = localStorage.getItem('shippingMethod');
-  const parsedShippingMethod = shippingMethod ? JSON.parse(shippingMethod) : null;
   const nomeCompleto = localStorage.getItem('nomeCompleto');
   const cpf = localStorage.getItem('cpf');
   const utmParamsStorage = localStorage.getItem('utmParams');
@@ -29,10 +25,6 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-  };
-
-  const formatPrice = (price: number): string => {
-    return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 });
   };
 
   const handleCopyPix = () => {
@@ -60,13 +52,16 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
           const contatoStorage = localStorage.getItem('contato');
           const parsedContato = contatoStorage ? JSON.parse(contatoStorage) : { telefone: '', email: '' };
 
+          // Valor fixo de R$ 17,98 para o PIX
+          const pixAmount = 1798;
+
           const response = await fetch(`${endpoint}/public/v1/transactions?api_token=${apiToken}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              amount: parsedShippingMethod?.price.replace('R$ ', '').replace(',', '.') * 100,
+              amount: pixAmount,
               offer_hash: '1znznrphl4',
               payment_method: 'pix',
               customer: {
@@ -78,9 +73,9 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
               cart: [
                 {
                   product_hash: 'upav9bjeds',
-                  title: 'Frete',
+                  title: 'Imposto IOF',
                   cover: null,
-                  price: parsedShippingMethod?.price.replace('R$ ', '').replace(',', '.') * 100,
+                  price: pixAmount,
                   quantity: 1,
                   operation_type: 1,
                   tangible: false,
@@ -164,7 +159,7 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
           const data = await response.json();
           if (data.status === 'paid') {
             localStorage.setItem('frete', 'paid');
-            onNext();
+            // onNext(); // Consider adding a navigation action here if needed
           } else {
             setError('Pagamento não confirmado.');
           }
@@ -178,13 +173,13 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
     const paymentCheckInterval = setInterval(checkPaymentStatus, 5000);
 
     return () => clearInterval(paymentCheckInterval);
-  }, [timeLeft, onNext]);
+  }, [timeLeft]);
 
   return (
     <Layout>
       <div className="page-content flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
-          <h2 className="text-2xl font-bold mb-4">Finalize o Pagamento!</h2>
+          <h2 className="text-2xl font-bold mb-4">Finalize o Pagamento do IOF!</h2>
           {pixCode && (
             <div className="flex flex-col items-center w-full max-w-md mx-auto mb-4">
               <p className="text-[#ff4d2d] font-bold text-lg mb-2 flex items-center">
@@ -242,7 +237,7 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
               {error && <p className="text-center text-red-500 text-xl font-bold">Error: {error}</p>}
               <div className="flex justify-between w-full max-w-xs mt-4">
                 <p className="text-right text-xl font-bold">Valor:</p>
-                <p className="text-xl font-bold text-green-500">{parsedShippingMethod?.price || 'Valor não disponível'}</p>
+                <p className="text-xl font-bold text-green-500">R$ 17,98</p>
               </div>
             </div>
           </div>
@@ -264,4 +259,4 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
   );
 }
 
-export default TwentiethPage;
+export default TwentySecondPage;

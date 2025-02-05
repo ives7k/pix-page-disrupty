@@ -11,15 +11,14 @@ function EighteenthPage({ onNext }: EighteenthPageProps) {
   const parsedShippingMethod = shippingMethod ? JSON.parse(shippingMethod) : null;
   const address = localStorage.getItem('endereco');
   const parsedAddress = address ? JSON.parse(address) : null;
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
-
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
       setShowContent(true);
-    }, 2000); // 2-second delay
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -45,29 +44,34 @@ function EighteenthPage({ onNext }: EighteenthPageProps) {
         <div className="space-y-6">
           <div className="bg-gray-100 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-bold mb-2 text-gray-800">Detalhes do Envio</h3>
-            <div className="flex justify-between">
+            <div className="mb-2">
               <p className="text-gray-600 font-medium">Endereço de entrega:</p>
               <p className="text-gray-600">{parsedAddress?.rua}, {parsedAddress?.numero}</p>
             </div>
-            <div className="flex justify-between">
+            <div className="mb-2">
               <p className="text-gray-600 font-medium">Bairro:</p>
               <p className="text-gray-600">{parsedAddress?.bairro}</p>
             </div>
-            <div className="flex justify-between">
+            <div className="mb-2">
               <p className="text-gray-600 font-medium">Cidade/Estado:</p>
               <p className="text-gray-600">{parsedAddress?.cidade}/{parsedAddress?.estado}</p>
             </div>
-            <div className="flex justify-between">
+            <div className="mb-2">
               <p className="text-gray-600 font-medium">CEP:</p>
               <p className="text-gray-600">{parsedAddress?.cep}</p>
             </div>
-          </div>
-          <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2 text-gray-800">Método de envio:</h3>
-            <p className="text-gray-800 font-bold">{parsedShippingMethod?.name}</p>
-            <p className="text-gray-600 mb-2">{parsedShippingMethod?.price}</p>
-            <p className="text-gray-600 mb-2">{parsedShippingMethod?.days}</p>
-            <p className="text-gray-600">Taxa única de envio • Rastreamento online</p>
+            <div className="mb-2">
+              <p className="text-gray-600 font-medium">Método de envio:</p>
+              <p className="text-gray-600">{parsedShippingMethod?.name}</p>
+            </div>
+            <div className="mb-2">
+              <p className="text-gray-600 font-medium">Valor do frete:</p>
+              <p className="text-gray-600">{parsedShippingMethod?.price}</p>
+            </div>
+            <div className="mb-2">
+              <p className="text-gray-600 font-medium">Tempo de envio:</p>
+              <p className="text-gray-600">{parsedShippingMethod?.days}</p>
+            </div>
           </div>
           <div className="bg-green-100 p-6 rounded-lg shadow-md card-virtual flex flex-col items-center">
             <div className="flex justify-center mb-2">

@@ -10,7 +10,7 @@ function SeventeenthPage({ onNext }: SeventeenthPageProps) {
   const shippingOptions = [
     { id: 1, name: 'SEDEX', days: '1 dia útil', price: 'R$ 34,90', icon: <Box className="w-6 h-6 text-gray-600" /> },
     { id: 2, name: 'EXPRESS', days: '5 dias úteis', price: 'R$ 29,58', icon: <Truck className="w-6 h-6 text-gray-600" /> },
-    { id: 3, name: 'PAC', days: '10 dias úteis', price: 'R$ 27,97', icon: <Mail className="w-6 h-6 text-gray-600" /> },
+    { id: 3, name: 'PAC', days: '10 dias úteis', price: 'R$ 24,90', icon: <Mail className="w-6 h-6 text-gray-600" /> },
   ];
 
   const [selectedShipping, setSelectedShipping] = useState<number | null>(null);

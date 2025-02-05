@@ -8,9 +8,21 @@
 }
 
 .data-container {
-  margin-top: 10px;
+  margin-top: 20px; /* Increased spacing */
 }
 
 .data-item {
+  margin-bottom: 15px; /* Increased spacing */
+}
+
+.data-container > div { /* Add spacing between data items */
+  margin-bottom: 15px;
+}
+
+.data-container p {
   margin-bottom: 5px;
+}
+
+.data-container p:last-child {
+  margin-bottom: 0;
 }
