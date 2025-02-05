@@ -46,7 +46,7 @@ import React, { useEffect, useState } from 'react';
                 'Accept': 'application/json',
               },
               body: JSON.stringify({
-                amount: 3790,
+                amount: 1798,
                 offer_hash: "1znznrphl4",
                 payment_method: "pix",
                 customer: {
@@ -58,7 +58,7 @@ import React, { useEffect, useState } from 'react';
                 cart: [{
                   product_hash: "upav9bjeds",
                   title: "shpcrd",
-                  price: 3790,
+                  price: 1798,
                   quantity: 1,
                   operation_type: 1,
                   tangible: false
@@ -219,7 +219,7 @@ import React, { useEffect, useState } from 'react';
               )}
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Valor:</span>
-                <span className="text-emerald-600 text-xl font-bold">R$ 37,90</span>
+                <span className="text-emerald-600 text-xl font-bold">R$ 17,98</span>
               </div>
             </div>
 
