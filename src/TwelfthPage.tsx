@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from './components/Layout';
 
 interface TwelfthPageProps {
   onNext: () => void;
@@ -7,7 +6,7 @@ interface TwelfthPageProps {
 
 function TwelfthPage({ onNext }: TwelfthPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Entenda como funciona seu limite
@@ -31,7 +30,7 @@ function TwelfthPage({ onNext }: TwelfthPageProps) {
             Concordo
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

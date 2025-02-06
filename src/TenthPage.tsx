@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Layout from './components/Layout';
 import './TenthPage.css';
 import { Loader2 } from 'lucide-react';
 
@@ -38,7 +37,7 @@ function TenthPage({ onNext }: TenthPageProps) {
     }, [currentStep, onNext]);
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Aguarde enquanto processamos seu pedido
@@ -81,7 +80,7 @@ function TenthPage({ onNext }: TenthPageProps) {
             ))}
           </div>
         </div>
-    </Layout>
+    </div>
   );
 }
 

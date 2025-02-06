@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Layout from './components/Layout';
 import { Truck, Store, MapPin } from 'lucide-react';
 
 interface FifteenthPageProps {
@@ -14,7 +13,7 @@ function FifteenthPage({ onNext }: FifteenthPageProps) {
   };
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Método de Entrega
@@ -55,7 +54,7 @@ function FifteenthPage({ onNext }: FifteenthPageProps) {
             </div>
           </div>
         </div>
-    </Layout>
+    </div>
   );
 }
 

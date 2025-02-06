@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Layout from './components/Layout';
 import { CheckCircle, CreditCard, Loader2 } from 'lucide-react';
 
 interface EighteenthPageProps {
@@ -24,7 +23,7 @@ function EighteenthPage({ onNext }: EighteenthPageProps) {
   }, []);
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
       <div className="text-center mb-8">
         {isLoading ? (
           <div className="flex justify-center mb-4">
@@ -85,7 +84,7 @@ function EighteenthPage({ onNext }: EighteenthPageProps) {
           </button>
         </div>
       )}
-    </Layout>
+    </div>
   );
 }
 

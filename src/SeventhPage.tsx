@@ -1,6 +1,5 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
-import Layout from './components/Layout';
 
 interface SeventhPageProps {
   onNext: () => void;
@@ -8,7 +7,7 @@ interface SeventhPageProps {
 
 function SeventhPage({ onNext }: SeventhPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <CheckCircle className="w-16 h-16 text-green-500 bg-green-100 rounded-full p-2" />
@@ -27,7 +26,7 @@ function SeventhPage({ onNext }: SeventhPageProps) {
             Continuar
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

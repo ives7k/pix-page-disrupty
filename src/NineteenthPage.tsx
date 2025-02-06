@@ -1,6 +1,4 @@
 import React from 'react';
-import Layout from './components/Layout';
-import { CreditCard, CheckCircle } from 'lucide-react';
 import './NineteenthPage.css';
 
 interface NineteenthPageProps {
@@ -19,7 +17,7 @@ function NineteenthPage({ onNext }: NineteenthPageProps) {
   const cpf = localStorage.getItem('cpf');
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
       <div className="page-content">
 
         <div className="main-content">
@@ -74,7 +72,7 @@ function NineteenthPage({ onNext }: NineteenthPageProps) {
           <button onClick={onNext} className="btn-custom w-full mt-4">Pagar Frete</button> 
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }
 

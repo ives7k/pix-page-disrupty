@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from './components/Layout';
 
 interface SixthPageProps {
   onNext: () => void;
@@ -7,7 +6,7 @@ interface SixthPageProps {
 
 function SixthPage({ onNext }: SixthPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Qual é o seu interesse com um cartão de crédito hoje?
@@ -32,7 +31,7 @@ function SixthPage({ onNext }: SixthPageProps) {
             Outros
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

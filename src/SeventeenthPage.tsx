@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Layout from './components/Layout';
 import { Box, Truck, Mail } from 'lucide-react';
 
 interface SeventeenthPageProps {
@@ -35,7 +34,7 @@ function SeventeenthPage({ onNext }: SeventeenthPageProps) {
   };
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Escolha o método de envio
@@ -63,7 +62,7 @@ function SeventeenthPage({ onNext }: SeventeenthPageProps) {
             Continuar
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

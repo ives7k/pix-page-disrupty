@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from './components/Layout';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 
 interface TwentyFirstPageProps {
@@ -8,7 +7,7 @@ interface TwentyFirstPageProps {
 
 function TwentyFirstPage({ onNext }: TwentyFirstPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-4 text-green-500">
           Parabéns, falta pouco para você receber o seu cartão de crédito!
@@ -70,7 +69,7 @@ function TwentyFirstPage({ onNext }: TwentyFirstPageProps) {
       <div className="flex justify-center">
         <img src="https://i.postimg.cc/02Md2Gvg/Banco-Central-do-Brasil-logo-1.png" alt="Banco Central do Brasil" className="h-16" />
       </div>
-    </Layout>
+    </div>
   );
 }
 

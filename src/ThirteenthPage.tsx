@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from './components/Layout';
 
 interface ThirteenthPageProps {
   onNext: () => void;
@@ -7,7 +6,7 @@ interface ThirteenthPageProps {
 
 function ThirteenthPage({ onNext }: ThirteenthPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Escolha a melhor data
@@ -35,7 +34,7 @@ function ThirteenthPage({ onNext }: ThirteenthPageProps) {
             Dia 30
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

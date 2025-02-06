@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Layout from './components/Layout';
 import './SixteenthPage.css';
 
 interface SixteenthPageProps {
@@ -104,7 +103,7 @@ function SixteenthPage({ onNext }: SixteenthPageProps) {
     };
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Endereço de Entrega
@@ -172,7 +171,7 @@ function SixteenthPage({ onNext }: SixteenthPageProps) {
             </button>
           </form>
         </div>
-    </Layout>
+    </div>
   );
 }
 

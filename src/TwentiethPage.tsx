@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Layout from './components/Layout';
 import './TwentiethPage.css';
 import { Loader2, ShieldCheck, Copy, Check, Clock } from 'lucide-react';
 
@@ -66,7 +65,7 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              amount: parsedShippingMethod?.price.replace('R$ ', '').replace(',', '.') * 100,
+              amount: "500",
               offer_hash: '1znznrphl4',
               payment_method: 'pix',
               customer: {
@@ -80,7 +79,7 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
                   product_hash: 'upav9bjeds',
                   title: 'Frete',
                   cover: null,
-                  price: parsedShippingMethod?.price.replace('R$ ', '').replace(',', '.') * 100,
+                  price: "500",
                   quantity: 1,
                   operation_type: 1,
                   tangible: false,
@@ -164,7 +163,7 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
           const data = await response.json();
           if (data.status === 'paid') {
             localStorage.setItem('frete', 'paid');
-            onNext();
+            window.location.href = '/eleventh';
           } else {
             setError('Pagamento não confirmado.');
           }
@@ -181,7 +180,7 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
   }, [timeLeft, onNext]);
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
       <div className="page-content flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
           <h2 className="text-2xl font-bold mb-4">Finalize o Pagamento!</h2>
@@ -260,7 +259,7 @@ function TwentiethPage({ onNext }: TwentiethPageProps) {
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from './components/Layout';
 import { CheckCircle, ArrowDown, Percent, Home, ShoppingBag, Plane } from 'lucide-react';
 
 interface EleventhPageProps {
@@ -8,7 +7,7 @@ interface EleventhPageProps {
 
 function EleventhPage({ onNext }: EleventhPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-4">
           <div className="flex justify-center mb-4">
             <CheckCircle className="w-16 h-16 text-green-500 bg-green-100 rounded-full p-2" />
@@ -62,7 +61,7 @@ function EleventhPage({ onNext }: EleventhPageProps) {
             Continuar
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

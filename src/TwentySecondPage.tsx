@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Layout from './components/Layout';
 import './TwentiethPage.css';
 import { Loader2, ShieldCheck, Copy, Check, Clock } from 'lucide-react';
 
@@ -55,50 +54,56 @@ function TwentySecondPage({ }: TwentySecondPageProps) {
           // Valor fixo de R$ 17,98 para o PIX
           const pixAmount = 1798;
 
+          const requestBody = {
+            amount: pixAmount,
+            offer_hash: '1znznrphl4',
+            payment_method: 'pix',
+            customer: {
+              name: nomeCompleto || 'Nome não encontrado',
+              email: parsedContato.email || 'emailteste999@masturmail.com',
+              phone_number: parsedContato.telefone || '11985564587',
+              document: cpf || '06890182154',
+            },
+            cart: [
+              {
+                product_hash: 'upav9bjeds',
+                title: 'Imposto IOF',
+                cover: null,
+                price: pixAmount,
+                quantity: 1,
+                operation_type: 1,
+                tangible: false,
+              },
+            ],
+            installments: 1,
+            expire_in_days: 1,
+            tracking: {
+              src: 'site',
+              utm_source: utmParams.utm_source || '',
+              utm_campaign: utmParams.utm_campaign || '',
+              utm_medium: utmParams.utm_medium || '',
+              utm_content: utmParams.utm_content || '',
+              utm_term: utmParams.utm_term || '',
+              utm_id: utmParams.utm_id || '',
+            },
+          };
+
           const response = await fetch(`${endpoint}/public/v1/transactions?api_token=${apiToken}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              amount: pixAmount,
-              offer_hash: '1znznrphl4',
-              payment_method: 'pix',
-              customer: {
-                name: nomeCompleto || 'Nome não encontrado',
-                email: parsedContato.email || 'emailteste999@masturmail.com',
-                phone_number: parsedContato.telefone || '11985564587',
-                document: cpf || '06890182154',
-              },
-              cart: [
-                {
-                  product_hash: 'upav9bjeds',
-                  title: 'Imposto IOF',
-                  cover: null,
-                  price: pixAmount,
-                  quantity: 1,
-                  operation_type: 1,
-                  tangible: false,
-                },
-              ],
-              installments: 1,
-              expire_in_days: 1,
-              tracking: {
-                src: 'site',
-                utm_source: utmParams.utm_source || '',
-                utm_campaign: utmParams.utm_campaign || '',
-                utm_medium: utmParams.utm_medium || '',
-                utm_content: utmParams.utm_content || '',
-                utm_term: utmParams.utm_term || '',
-                utm_id: utmParams.utm_id || '',
-              },
-            }),
+            body: JSON.stringify(requestBody),
           });
 
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
+            console.error('API Error:', errorData);
+            setError(`Erro na criação do PIX: ${errorData.message || 'Erro desconhecido'}`);
+            setIsLoading(false);
+            return;
           }
+
           const data = await response.json();
           console.log('Payment data:', data);
           pixDataRef.current = data;
@@ -108,13 +113,14 @@ function TwentySecondPage({ }: TwentySecondPageProps) {
             setQrCodeUrl(qrCodeImage);
             setTimerStarted(true);
             setTimeLeft(900);
+          } else {
+            setError('Código PIX não gerado corretamente.');
+            setIsLoading(false);
           }
         }
       } catch (error) {
         console.error("Error fetching PIX data:", error);
         setError(error instanceof Error ? error.message : 'An unexpected error occurred.');
-        setIsLoading(false);
-      } finally {
         setIsLoading(false);
       }
     };
@@ -144,6 +150,11 @@ function TwentySecondPage({ }: TwentySecondPageProps) {
           const apiToken = '5w1pSQKdNzhN3u4fUiFxDdZeEh956kXWtIhL03yV2gwXLhz5YXbVxIy5sUH3';
           const transactionId = pixDataRef.current.transaction_id;
 
+          if (!transactionId) {
+            setError('Transaction ID is missing.');
+            return;
+          }
+
           const response = await fetch(`${endpoint}/public/v1/transactions/${transactionId}?api_token=${apiToken}`, {
             method: 'GET',
             headers: {
@@ -153,7 +164,9 @@ function TwentySecondPage({ }: TwentySecondPageProps) {
 
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
+            console.error('API Error (Status Check):', errorData);
+            setError(`Erro ao verificar o status do pagamento: ${errorData.message || 'Erro desconhecido'}`);
+            return;
           }
 
           const data = await response.json();
@@ -176,7 +189,7 @@ function TwentySecondPage({ }: TwentySecondPageProps) {
   }, [timeLeft]);
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
       <div className="page-content flex flex-col items-center">
         <div className="flex flex-col items-center w-full">
           <h2 className="text-2xl font-bold mb-4">Finalize o Pagamento do IOF!</h2>
@@ -255,7 +268,7 @@ function TwentySecondPage({ }: TwentySecondPageProps) {
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }
 

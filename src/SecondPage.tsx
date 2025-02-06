@@ -1,6 +1,5 @@
 import React from 'react';
 import { DollarSign, Rocket, MinusCircle, Calendar } from 'lucide-react';
-import Layout from './components/Layout';
 
 interface SecondPageProps {
   onNext: () => void;
@@ -8,7 +7,7 @@ interface SecondPageProps {
 
 function SecondPage({ onNext }: SecondPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             O que é mais importante para você em um cartão de crédito?
@@ -34,7 +33,7 @@ function SecondPage({ onNext }: SecondPageProps) {
             <span className="font-bold">Sem anuidade</span>
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

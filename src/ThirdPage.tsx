@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from './components/Layout';
 
 interface ThirdPageProps {
   onNext: () => void;
@@ -8,7 +7,7 @@ interface ThirdPageProps {
 
 function ThirdPage({ onNext, onBack }: ThirdPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Em qual grupo você se encaixa?
@@ -39,7 +38,7 @@ function ThirdPage({ onNext, onBack }: ThirdPageProps) {
             Autônomo
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

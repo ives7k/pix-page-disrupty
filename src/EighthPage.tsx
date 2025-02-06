@@ -1,6 +1,5 @@
 import React from 'react';
 import { Shield, Database, Home } from 'lucide-react';
-import Layout from './components/Layout';
 
 interface EighthPageProps {
   onNext: () => void;
@@ -8,7 +7,7 @@ interface EighthPageProps {
 
 function EighthPage({ onNext }: EighthPageProps) {
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-4">
             Conta digital e cartão de crédito
@@ -42,7 +41,7 @@ function EighthPage({ onNext }: EighthPageProps) {
             Li e concordo
           </button>
         </div>
-    </Layout>
+    </div>
   );
 }
 

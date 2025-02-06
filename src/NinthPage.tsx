@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { CheckCircle, Loader2 } from 'lucide-react';
-import Layout from './components/Layout';
 import './NinthPage.css';
 
 interface NinthPageProps {
@@ -81,7 +80,7 @@ function NinthPage({ onNext }: NinthPageProps) {
     };
 
   return (
-    <Layout>
+    <div className="max-w-md px-4 py-8 flex-1 w-full">
         {!cpfData && (
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold mb-4">
@@ -145,7 +144,7 @@ function NinthPage({ onNext }: NinthPageProps) {
             </button>
           </>
         )}
-    </Layout>
+    </div>
   );
 }
 
